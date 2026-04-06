@@ -23,22 +23,31 @@ export function usePolicies() {
   const { data, isLoading, error } = useQuery({
     queryKey: ['store-policies'],
     queryFn: async () => {
+      const url = `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/policies`
+      console.log('[usePolicies] Fetching from:', url)
+      console.log('[usePolicies] Headers:', {
+        'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY,
+        'X-Store-Environment-ID': process.env.NEXT_PUBLIC_STORE_ID,
+      })
+
       // Fetch policies from public /store/policies endpoint
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/policies`,
-        {
-          headers: {
-            'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || '',
-            'X-Store-Environment-ID': process.env.NEXT_PUBLIC_STORE_ID || '',
-          },
-        }
-      )
+      const response = await fetch(url, {
+        headers: {
+          'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || '',
+          'X-Store-Environment-ID': process.env.NEXT_PUBLIC_STORE_ID || '',
+        },
+      })
+
+      console.log('[usePolicies] Response status:', response.status)
 
       if (!response.ok) {
+        const errorText = await response.text()
+        console.error('[usePolicies] Error response:', errorText)
         throw new Error('Failed to fetch policies')
       }
 
       const data: PoliciesResponse = await response.json()
+      console.log('[usePolicies] Policies data:', data.policies)
       return data.policies
     },
     staleTime: 1000 * 60 * 60, // 1 hour — policies rarely change (matches backend cache)

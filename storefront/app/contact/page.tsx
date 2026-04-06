@@ -4,11 +4,15 @@ import { usePolicies } from '@/hooks/use-policies'
 import { Mail, MapPin, Clock, Phone, Loader2 } from 'lucide-react'
 
 export default function ContactPage() {
-  const { policies, isLoading } = usePolicies()
+  const { policies, isLoading, error } = usePolicies()
 
-  const contactEmail = policies?.contact_email || 'hello@yourstore.com'
-  const contactPhone = policies?.contact_phone || null
-  const contactAddress = policies?.contact_address || '123 Commerce Street\nNew York, NY 10001'
+  // Debug: log to see what's happening
+  if (error) console.error('Policies fetch error:', error)
+  if (policies) console.log('Policies loaded:', policies)
+
+  const contactEmail = policies?.contact_email
+  const contactPhone = policies?.contact_phone
+  const contactAddress = policies?.contact_address
 
   return (
     <>
@@ -50,16 +54,22 @@ export default function ContactPage() {
               <div className="flex items-center justify-center py-12">
                 <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
               </div>
+            ) : error ? (
+              <div className="text-sm text-muted-foreground">
+                <p>Unable to load contact information. Please try again later.</p>
+              </div>
             ) : (
               <>
-                <div className="flex gap-4">
-                  <Mail className="h-5 w-5 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
-                  <div>
-                    <p className="font-medium text-sm">Email</p>
-                    <p className="text-sm text-muted-foreground mt-1">{contactEmail}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">We respond within 24 hours</p>
+                {contactEmail && (
+                  <div className="flex gap-4">
+                    <Mail className="h-5 w-5 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <div>
+                      <p className="font-medium text-sm">Email</p>
+                      <p className="text-sm text-muted-foreground mt-1">{contactEmail}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">We respond within 24 hours</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {contactPhone && (
                   <div className="flex gap-4">
@@ -72,13 +82,15 @@ export default function ContactPage() {
                   </div>
                 )}
 
-                <div className="flex gap-4">
-                  <MapPin className="h-5 w-5 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
-                  <div>
-                    <p className="font-medium text-sm">Address</p>
-                    <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line">{contactAddress}</p>
+                {contactAddress && (
+                  <div className="flex gap-4">
+                    <MapPin className="h-5 w-5 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+                    <div>
+                      <p className="font-medium text-sm">Address</p>
+                      <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line">{contactAddress}</p>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="flex gap-4">
                   <Clock className="h-5 w-5 flex-shrink-0 mt-0.5" strokeWidth={1.5} />
@@ -87,6 +99,12 @@ export default function ContactPage() {
                     <p className="text-sm text-muted-foreground mt-1">Mon — Fri: 9am to 6pm EST<br />Sat — Sun: 10am to 4pm EST</p>
                   </div>
                 </div>
+
+                {!contactEmail && !contactPhone && !contactAddress && (
+                  <div className="text-sm text-muted-foreground">
+                    <p>Contact information not yet configured.</p>
+                  </div>
+                )}
               </>
             )}
           </div>
