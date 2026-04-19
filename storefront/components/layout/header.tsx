@@ -81,9 +81,9 @@ export default function Header() {
             </button>
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-              <span className="font-heading text-2xl font-semibold tracking-tight">
-                Store
+            <Link href="/" className="flex items-center gap-2 group">
+              <span className="font-heading text-2xl font-bold tracking-tight uppercase">
+                Koffa<span className="text-accent">.</span>
               </span>
             </Link>
 

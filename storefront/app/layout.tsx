@@ -30,10 +30,10 @@ const body = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Store — Modern Commerce',
-    template: '%s | Store',
+    default: 'Koffa — Single-Origin Coffee, Roasted in Lagos',
+    template: '%s | Koffa',
   },
-  description: 'Discover curated products crafted with care. A modern ecommerce experience.',
+  description: 'Fire-roasted in small batches. Direct-trade beans from Ethiopia, Kenya and Rwanda. Shipped within 24 hours of roast.',
 }
 
 export default function RootLayout({
