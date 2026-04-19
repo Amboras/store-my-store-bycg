@@ -5,7 +5,6 @@ import Image from 'next/image'
 import { useState } from 'react'
 import {
   ArrowRight,
-  ArrowUpRight,
   Truck,
   Shield,
   Leaf,
@@ -19,9 +18,7 @@ import { useCollections } from '@/hooks/use-collections'
 import { trackMetaEvent } from '@/lib/meta-pixel'
 
 const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1600&q=80'
-const HERO_SECONDARY =
-  'https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1200&q=80'
+  'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=2000&q=80'
 const EDITORIAL_1 =
   'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=1400&q=80'
 const EDITORIAL_2 =
@@ -52,118 +49,79 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ===================== HERO ===================== */}
+      {/* ===================== HERO (full-bleed, centered) ===================== */}
       <section className="relative bg-foreground text-primary-foreground overflow-hidden">
-        <div className="container-custom relative grid lg:grid-cols-12 gap-8 lg:gap-10 items-stretch py-16 lg:py-24 min-h-[85vh]">
-          {/* LEFT — Copy */}
-          <div className="lg:col-span-6 flex flex-col justify-between z-10 animate-fade-in-up">
-            <div className="flex items-center gap-3 text-xs uppercase tracking-[0.25em] text-primary-foreground/60">
+        <div className="relative h-[92vh] min-h-[620px] w-full">
+          {/* Full-bleed background image */}
+          <Image
+            src={HERO_IMAGE}
+            alt="Freshly brewed Koffa pour-over"
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
+          {/* Overlays for legibility */}
+          <div className="absolute inset-0 bg-foreground/60" />
+          <div className="absolute inset-0 bg-gradient-to-b from-foreground/40 via-transparent to-foreground/80" />
+
+          {/* Centered content */}
+          <div className="relative z-10 h-full container-custom flex flex-col items-center justify-center text-center">
+            <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.3em] text-primary-foreground/80 animate-fade-in">
               <span className="h-px w-8 bg-accent" />
               <MapPin className="h-3.5 w-3.5 text-accent" strokeWidth={2} />
               Roasted in Lagos · Est. 2021
+              <span className="h-px w-8 bg-accent" />
             </div>
 
-            <div className="mt-10 space-y-7">
-              <h1 className="font-heading font-bold uppercase leading-[0.95] tracking-tight text-[clamp(3rem,8vw,6.5rem)]">
-                Coffee with
-                <br />
-                <span className="italic font-normal text-accent normal-case">a story</span>
-                <br />
-                in every bean.
-              </h1>
-              <p className="text-base lg:text-lg text-primary-foreground/70 max-w-md leading-relaxed">
-                Direct-trade beans from the highlands of Ethiopia, Kenya and
-                Rwanda. Fire-roasted in small 8kg batches. Shipped within 24
-                hours of roast — so it tastes like it should.
-              </p>
+            <h1 className="mt-8 font-heading font-bold uppercase leading-[0.95] tracking-tight text-[clamp(3rem,9vw,7.5rem)] max-w-5xl animate-fade-in-up">
+              Coffee with{' '}
+              <span className="italic font-normal text-accent normal-case">a story</span>
+              <br />
+              in every bean.
+            </h1>
 
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <Link
-                  href="/products"
-                  className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-4 text-sm font-semibold uppercase tracking-wider hover:brightness-110 transition-all"
-                  prefetch={true}
-                >
-                  Shop The Roast
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/about"
-                  className="inline-flex items-center gap-2 border border-primary-foreground/30 px-8 py-4 text-sm font-semibold uppercase tracking-wider hover:bg-primary-foreground hover:text-foreground transition-colors"
-                  prefetch={true}
-                >
-                  Our Story
-                </Link>
-              </div>
+            <p className="mt-7 text-base lg:text-lg text-primary-foreground/80 max-w-xl leading-relaxed animate-fade-in-up">
+              Direct-trade beans from the highlands of Ethiopia, Kenya and Rwanda.
+              Fire-roasted in small 8kg batches and shipped within 24 hours.
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3 animate-fade-in-up">
+              <Link
+                href="/products"
+                className="inline-flex items-center gap-2 bg-accent text-accent-foreground px-8 py-4 text-sm font-semibold uppercase tracking-wider hover:brightness-110 transition-all"
+                prefetch={true}
+              >
+                Shop The Roast
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-2 border border-primary-foreground/40 px-8 py-4 text-sm font-semibold uppercase tracking-wider backdrop-blur-sm hover:bg-primary-foreground hover:text-foreground transition-colors"
+                prefetch={true}
+              >
+                Our Story
+              </Link>
             </div>
 
-            {/* Hero stat row */}
-            <div className="mt-14 grid grid-cols-3 gap-4 pt-8 border-t border-primary-foreground/15">
-              <div>
-                <p className="font-heading text-3xl font-bold text-accent">12k+</p>
-                <p className="text-[11px] uppercase tracking-widest text-primary-foreground/60 mt-1">
+            {/* Stat row — floating over hero */}
+            <div className="absolute bottom-10 left-0 right-0 container-custom hidden md:grid grid-cols-3 gap-4 pt-6 border-t border-primary-foreground/20 max-w-3xl mx-auto">
+              <div className="text-center">
+                <p className="font-heading text-2xl font-bold text-accent">12k+</p>
+                <p className="text-[10px] uppercase tracking-widest text-primary-foreground/70 mt-1">
                   Bags shipped
                 </p>
               </div>
-              <div>
-                <p className="font-heading text-3xl font-bold text-accent">24h</p>
-                <p className="text-[11px] uppercase tracking-widest text-primary-foreground/60 mt-1">
+              <div className="text-center">
+                <p className="font-heading text-2xl font-bold text-accent">24h</p>
+                <p className="text-[10px] uppercase tracking-widest text-primary-foreground/70 mt-1">
                   Roast to ship
                 </p>
               </div>
-              <div>
-                <p className="font-heading text-3xl font-bold text-accent">4.9★</p>
-                <p className="text-[11px] uppercase tracking-widest text-primary-foreground/60 mt-1">
+              <div className="text-center">
+                <p className="font-heading text-2xl font-bold text-accent">4.9★</p>
+                <p className="text-[10px] uppercase tracking-widest text-primary-foreground/70 mt-1">
                   Customer rating
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* RIGHT — Image collage */}
-          <div className="lg:col-span-6 relative grid grid-cols-5 grid-rows-6 gap-3 min-h-[480px]">
-            <div className="col-span-5 row-span-4 relative overflow-hidden rounded-sm group">
-              <Image
-                src={HERO_IMAGE}
-                alt="Freshly brewed Koffa pour-over"
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-[2s]"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
-              <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.25em] text-primary-foreground/70">
-                    Bestseller
-                  </p>
-                  <p className="font-heading text-2xl font-semibold">Signature Blend</p>
-                </div>
-                <Link
-                  href="/products"
-                  className="h-11 w-11 flex items-center justify-center bg-accent text-accent-foreground rounded-full hover:scale-110 transition-transform"
-                  aria-label="Shop signature blend"
-                >
-                  <ArrowUpRight className="h-5 w-5" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="col-span-3 row-span-2 relative overflow-hidden rounded-sm">
-              <Image
-                src={HERO_SECONDARY}
-                alt="Coffee beans close-up"
-                fill
-                sizes="30vw"
-                className="object-cover"
-              />
-            </div>
-
-            <div className="col-span-2 row-span-2 bg-accent text-accent-foreground rounded-sm p-4 flex flex-col justify-between">
-              <Flame className="h-6 w-6" strokeWidth={1.75} />
-              <div>
-                <p className="font-heading text-2xl font-bold leading-none">Fresh.</p>
-                <p className="text-[11px] uppercase tracking-widest mt-1 opacity-90">
-                  Roasted this week
                 </p>
               </div>
             </div>
@@ -171,7 +129,7 @@ export default function HomePage() {
         </div>
 
         {/* Marquee strip */}
-        <div className="border-t border-primary-foreground/10 bg-foreground/80 overflow-hidden">
+        <div className="border-t border-primary-foreground/10 bg-foreground/90 overflow-hidden">
           <div className="marquee-track flex gap-10 py-4 whitespace-nowrap">
             {[...marqueeWords, ...marqueeWords, ...marqueeWords].map((word, i) => (
               <span
